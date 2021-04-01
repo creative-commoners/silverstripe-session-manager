@@ -1,3 +1,4 @@
+/* global ss */
 import i18n from 'i18n';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -25,10 +26,12 @@ function LoginSession(props) {
         props.logout();
     }
 
-    const created = moment(props.Created);
-    const createdElapsed = moment.utc(props.Created).fromNow();
-    const lastAccessed = moment(props.LastAccessed);
-    const lastAccessedElapsed = moment.utc(props.LastAccessed).fromNow();
+    moment.locale(ss.i18n.currentLocale);
+    const format = 'L LT';
+    const created = moment.utc(props.Created).local();
+    const createdElapsed = created.fromNow();
+    const lastAccessed = moment.utc(props.LastAccessed).local();
+    const lastAccessedElapsed = lastAccessed.fromNow();
     const currentStr = i18n._t('SessionManager.CURRENT', 'Current');
     const lastActiveStr = props.IsCurrent ?
         i18n.inject(
@@ -46,8 +49,8 @@ function LoginSession(props) {
     const activityTooltip = i18n.inject(
         i18n._t('Admin.ACTIVITY_TOOLTIP_TEXT', 'Signed in {signedIn}, Last active {lastActive}'),
         {
-            signedIn: created.format('L LT'),
-            lastActive: lastAccessed.format('L LT')
+            signedIn: created.format(format),
+            lastActive: lastAccessed.format(format)
         }
     );
 
