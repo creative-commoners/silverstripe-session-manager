@@ -18,12 +18,6 @@ function setEndpointFetcherSuccess(success) {
 let httpResolve;
 let httpReject;
 
-// {
-//     error: false,
-//     success: global.success,
-//     message: 'message'
-// }
-
 jest.mock('lib/Backend', () => ({
     createEndpointFetcher: () => () => (
         new Promise((resolve, reject) => {
@@ -70,6 +64,7 @@ describe('LoginSessionContainer', () => {
         let wrapper = shallow(<LoginSessionContainer {...props} />);
         let loginSession = wrapper.find(LoginSession).first();
 
+        // Test initial state
         expect(loginSession.props()).toMatchObject({
             ...sessionData,
             complete: false,
@@ -77,8 +72,8 @@ describe('LoginSessionContainer', () => {
             submitting: false
         });
 
+        // Test loading state
         const logoutRequest = loginSession.props().logout();
-
         wrapper = wrapper.update();
         loginSession = wrapper.find(LoginSession).first();
         expect(loginSession.props()).toMatchObject({
@@ -95,6 +90,7 @@ describe('LoginSessionContainer', () => {
         });
         await logoutRequest;
 
+        // Test final state
         wrapper = wrapper.update();
         loginSession = wrapper.find(LoginSession).first();
         expect(loginSession.props()).toMatchObject({
@@ -113,6 +109,7 @@ describe('LoginSessionContainer', () => {
         let wrapper = shallow(<LoginSessionContainer {...props} />);
         let loginSession = wrapper.find(LoginSession).first();
 
+        // Test initial state
         expect(loginSession.props()).toMatchObject({
             ...sessionData,
             complete: false,
@@ -120,8 +117,8 @@ describe('LoginSessionContainer', () => {
             submitting: false
         });
 
+        // Test loading state
         const logoutRequest = loginSession.props().logout();
-
         wrapper = wrapper.update();
         loginSession = wrapper.find(LoginSession).first();
         expect(loginSession.props()).toMatchObject({
@@ -138,6 +135,7 @@ describe('LoginSessionContainer', () => {
         });
         await logoutRequest;
 
+        // Test finale state
         wrapper = wrapper.update();
         loginSession = wrapper.find(LoginSession).first();
         expect(loginSession.props()).toMatchObject({
@@ -155,6 +153,7 @@ describe('LoginSessionContainer', () => {
         let wrapper = shallow(<LoginSessionContainer {...props} />);
         let loginSession = wrapper.find(LoginSession).first();
 
+        // Test initial state
         expect(loginSession.props()).toMatchObject({
             ...sessionData,
             complete: false,
@@ -162,8 +161,8 @@ describe('LoginSessionContainer', () => {
             submitting: false
         });
 
+        // Test loading state
         const logoutRequest = loginSession.props().logout();
-
         wrapper = wrapper.update();
         loginSession = wrapper.find(LoginSession).first();
         expect(loginSession.props()).toMatchObject({
@@ -173,9 +172,11 @@ describe('LoginSessionContainer', () => {
             submitting: true
         });
 
+        // Cause an HTTP Failure
         httpReject();
         await logoutRequest;
 
+        // Test error state
         wrapper = wrapper.update();
         loginSession = wrapper.find(LoginSession).first();
         expect(loginSession.props()).toMatchObject({
